@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <button (click)="predict()" [disabled]="!area || loading">
+                <button (click)="predict()" [disabled]="!area || loading" class="predict-button">
                     <span *ngIf="!loading">Predict Yield</span>
                     <span *ngIf="loading">Calculating...</span>
                 </button>
