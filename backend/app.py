@@ -9,7 +9,14 @@ matplotlib.use('Agg') # Use non-interactive backend for server
 import matplotlib.pyplot as plt
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins to fix loading issues
+# Allow specific frontend origins (CORS)
+CORS(app, resources={r"/*": {
+    "origins": [
+        "http://localhost:4200", 
+        "http://127.0.0.1:4200",
+        "https://coconut-yield-app.onrender.com"
+    ]
+}})
 
 # ==========================================
 # ML MODEL IMPLEMENTATION (Math from Scratch)
@@ -27,7 +34,7 @@ class LinearRegressionGradientDescent:
         self.weights = None                # Linear Algebra: Parameter vector (w)
         self.bias = None                   # Linear Algebra: Constant offset (b)
         self.cost_history = []             # Statistics: Tracking Error over time
-        
+         
     def fit(self, X, y):
         # Linear Algebra: Extract matrix dimensions (m samples, n features)
         n_samples, n_features = X.shape
@@ -359,6 +366,15 @@ def get_data_insight():
         return jsonify({'error': str(e)}), 500
 
 import os
+
+@app.route('/', methods=['GET'])
+def health_check():
+    """Simple health check for Render/Cloud monitoring"""
+    return jsonify({
+        'status': 'online',
+        'model_loaded': model is not None,
+        'message': 'Parthiban AI Backend is running'
+    }), 200
 
 if __name__ == '__main__':
     train_model() # Train before starting server
