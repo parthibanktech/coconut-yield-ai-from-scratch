@@ -1,0 +1,50 @@
+name: Coconut Yield CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # 1. SETUP PYTHON (Backend Check)
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Backend Dependencies
+      run: |
+        cd backend
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Backend Syntax Check
+      run: |
+        cd backend
+        python -m py_compile app.py
+
+    # 2. SETUP NODE (Frontend Check)
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Frontend Dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name: Frontend Build Check
+      run: |
+        cd frontend
+        npm run build
+
+    # 3. TRIGGER DEPLOY (Wait for successes first)
+    # Note: We will add the actual "Trigger Render" step once you get your Deploy Hook URL.
