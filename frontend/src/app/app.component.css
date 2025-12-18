@@ -320,6 +320,90 @@ td {
   border: 1px solid #e5e7eb;
 }
 
+/* Creator & Education Branding */
+.creator-badge {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: white;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-bottom: 2rem !important;
+}
+
+.math-hero-section {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.math-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 1.5rem;
+}
+
+.math-mini-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #f3f4f6;
+  transition: transform 0.3s ease;
+}
+
+.math-mini-card:hover {
+  transform: translateY(-5px);
+}
+
+.math-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.math-mini-card h4 {
+  margin: 0 0 5px 0;
+  color: #1f2937;
+  font-size: 0.9rem;
+}
+
+.math-mini-card p {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.75rem;
+}
+
+.edu-notice {
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #92400e;
+  text-align: center;
+}
+
+/* Original Styles */
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: slideDown 0.8s ease-out;
+}
+
 .fadeIn {
   animation: fadeIn 0.5s ease-out;
 }

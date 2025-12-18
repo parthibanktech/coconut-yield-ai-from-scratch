@@ -43,7 +43,7 @@ Ensure your folder structure looks like this on GitHub:
 3.  **Name:** `coconut-yield-app`
 4.  **Root Directory:** `frontend`
 5.  **Build Command:** `npm install && npm run build`
-6.  **Publish Directory:** `dist/frontend/browser` (Check your Angular project to confirm the path, usually starts with `dist/`).
+6.  **Publish Directory:** `dist/frontend/browser`
 7.  Click **Create Static Site**.
 
 ---

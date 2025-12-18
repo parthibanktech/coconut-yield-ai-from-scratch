@@ -4,6 +4,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
+import { environment } from '../environments/environment';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -25,7 +27,7 @@ export class AppComponent {
   dataInsight: any | null = null;
   dataLoading = false;
   dataError: string | null = null;
-  private apiUrl = 'http://127.0.0.1:8080';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer) {
     this.loadData();
