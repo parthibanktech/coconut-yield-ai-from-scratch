@@ -1,0 +1,18 @@
+# Node.js / Angular
+**/node_modules/
+**/dist/
+**/.angular/
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/venv/
+**/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large Data (Optional, but usually included if needed for deployment)
+# crop_production.csv
