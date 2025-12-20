@@ -16,7 +16,7 @@ services:
     runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist/frontend
+    staticPublishPath: dist/frontend/browser  # Corrected for Angular v17+
     routes:
       - type: rewrite
         source: /*
