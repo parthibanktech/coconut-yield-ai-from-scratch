@@ -11,14 +11,13 @@ services:
         value: 8080
 
   # 2. Frontend Service (Angular Static Site)
-  - type: static
+  - type: static_site
     name: coconut-yield-app
-    runtime: static
     region: oregon
     plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
-    publishDir: dist/frontend/browser
+    staticPublishPath: dist/frontend/browser
     routes:
       - type: rewrite
         source: /*
