@@ -12,9 +12,14 @@ app = Flask(__name__)
 # Allow ALL origins for deployment stability
 CORS(app)
 
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
 import os
-print(f"DEBUG: Current directory: {os.getcwd()}")
-print(f"DEBUG: Files: {os.listdir('.')}")
 
 if not os.path.exists('crop_production.csv'):
     print("CRITICAL: crop_production.csv NOT FOUND in backend folder!")
