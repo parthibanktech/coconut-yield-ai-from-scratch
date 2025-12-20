@@ -1,0 +1,25 @@
+services:
+  # 1. Backend Service (Flask API)
+  - type: web
+    name: coconut-backend
+    runtime: docker
+    region: oregon
+    plan: free
+    rootDir: backend
+    envVars:
+      - key: PORT
+        value: 8080
+
+  # 2. Frontend Service (Angular Static Site)
+  - type: static
+    name: coconut-yield-app
+    runtime: static
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist/frontend/browser
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -1,64 +1,58 @@
-# Deploying to Render (Free & Simple)
+# Deploying to Render (Blueprint Method - RECOMMENDED)
 
-Render is an excellent alternative to Vertex AI for free hosting. It will automatically build your Docker container whenever you push code to GitHub.
+This method uses the `render.yaml` file to deploy both your **Backend** and **Frontend** at the same time. This is the "Correct Solution" to ensure they work together perfectly.
 
 ## Prerequisites
 1.  A **GitHub** account.
 2.  Your project pushed to a GitHub repository.
-3.  A **Render.com** account (Free).
+3.  A **Render.com** account.
 
 ---
 
-## Step 1: Prepare your Repository
-Ensure your folder structure looks like this on GitHub:
-```text
-/ (Root)
-  ├── backend/
-  │    ├── app.py
-  │    ├── Dockerfile
-  │    ├── requirements.txt
-  │    └── crop_production.csv
-  └── frontend/ (Angular project)
-```
-
-## Step 2: Deploy the Backend (API)
+## Step 1: Deploy with Blueprints (The "Correct" way)
 1.  Log in to [Render Dashboard](https://dashboard.render.com).
-2.  Click **New +** -> **Web Service**.
+2.  Click **New +** -> **Blueprint**.
 3.  Connect your GitHub repository.
-4.  **Name:** `coconut-backend`
-5.  **Region:** Select one closest to you (e.g., Singapore or US West).
-6.  **Branch:** `main` (or yours).
-7.  **Root Directory:** `backend`  <-- **CRITICAL: Set this to "backend"**
-8.  **Runtime:** `Docker` (Render will detect your `Dockerfile`).
-9.  **Instance Type:** `Free`.
-10. Click **Create Web Service**.
+4.  Render will find the `render.yaml` file automatically.
+5.  Click **Apply**.
 
-**Wait for build:** Render will take 2-5 minutes to build your container. Once done, you will get a URL like `https://coconut-backend-xyz.onrender.com`.
+**What happens now?**
+Render will start building two things:
+*   `coconut-backend` (Web Service)
+*   `coconut-yield-app` (Static Site)
 
 ---
 
-## Step 3: Deploy the Frontend (Static Site)
-1.  In Render Dashboard, click **New +** -> **Static Site**.
-2.  Connect the same GitHub repository.
-3.  **Name:** `coconut-yield-app`
-4.  **Root Directory:** `frontend`
-5.  **Build Command:** `npm install && npm run build`
-6.  **Publish Directory:** `dist/frontend/browser`
-7.  Click **Create Static Site**.
-
----
-
-## Step 4: Link the Two
-Once your backend is live on Render:
-1.  Open `frontend/src/app/app.component.ts`.
-2.  Update the `apiUrl` to your new Render backend URL:
+## Step 2: Link the Backend to the Frontend
+Once the builds are finished:
+1.  Go to your Render Dashboard and find **`coconut-backend`**.
+2.  Copy its URL (e.g., `https://coconut-backend.onrender.com`).
+3.  Open `frontend/src/environments/environment.prod.ts` in your code editor.
+4.  Update the `apiUrl` with your copied URL:
     ```typescript
-    private apiUrl = 'https://coconut-backend-xyz.onrender.com';
+    export const environment = {
+        production: true,
+        apiUrl: 'https://coconut-backend.onrender.com' // <-- Paste your URL here
+    };
     ```
-3.  Push this change to GitHub. Render will automatically re-deploy your frontend.
+5.  **Commit and Push** this change to GitHub. Render will automatically re-deploy your frontend.
 
 ---
 
-## Crucial Note on the Free Tier
-*   **Spin-down:** Render's free tier "sleeps" after 15 minutes of inactivity. When you visit the app after it sleeps, the first request might take **30-60 seconds** to wake up the server. This is normal for free hosting!
-*   **No Credit Card:** Unlike Google Vertex AI, Render does not require a credit card for the free tier.
+## Troubleshooting "Why only one shown?"
+If you followed the old manual steps, Render might be confused. The Blueprint method fixes this because:
+1.  **Grouped Services:** Both services will now appear under a single "Blueprint" group.
+2.  **Correct Paths:** The `rootDir` settings are already handled in the code.
+
+## Crucial Local Fix (If you deleted your services)
+If you deleted your Render services to start over:
+1.  Go to **Blueprints** in Render.
+2.  Delete any old blueprints if they exist.
+3.  Follow **Step 1** above again.
+
+---
+
+## Technical Details (For your reference)
+*   **Backend Port:** `8080` (Docker).
+*   **Frontend Output:** `dist/frontend/browser` (Angular 21).
+*   **Spin-down:** The free tier sleeps after 15 mins. The first load will be slow!
