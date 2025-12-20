@@ -9,15 +9,16 @@ matplotlib.use('Agg') # Use non-interactive backend for server
 import matplotlib.pyplot as plt
 
 app = Flask(__name__)
-# Allow specific frontend origins (CORS)
-CORS(app, resources={r"/*": {
-    "origins": [
-        "http://localhost:4200", 
-        "http://127.0.0.1:4200",
-        "https://coconut-yield-app.onrender.com",
-        "https://*.onrender.com"
-    ]
-}})
+# Allow ALL origins for deployment stability
+CORS(app)
+
+import os
+print(f"DEBUG: Current directory: {os.getcwd()}")
+print(f"DEBUG: Files: {os.listdir('.')}")
+
+if not os.path.exists('crop_production.csv'):
+    print("CRITICAL: crop_production.csv NOT FOUND in backend folder!")
+
 
 # ==========================================
 # ML MODEL IMPLEMENTATION (Math from Scratch)
