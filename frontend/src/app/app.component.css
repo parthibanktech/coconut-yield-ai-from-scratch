@@ -22,26 +22,27 @@
 
 /* Header & Math Hero Section */
 header {
-  text-align: center;
-  margin-bottom: 4rem;
+  text-align: left;
+  margin-bottom: 3rem;
   animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 header h1 {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 900;
   background: linear-gradient(to right, #1e293b, #7c3aed);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   letter-spacing: -0.025em;
 }
 
 .subtitle {
   color: #64748b;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 500;
-  margin-bottom: 3rem !important;
+  margin-bottom: 2rem !important;
 }
 
 .math-hero-section {
@@ -58,9 +59,15 @@ header h1 {
 
 .math-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .math-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .math-mini-card {
@@ -138,7 +145,7 @@ header h1 {
 .tabs button.active {
   background: #7c3aed;
   color: white;
-  box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
 }
 
 .tabs button:hover:not(.active) {
