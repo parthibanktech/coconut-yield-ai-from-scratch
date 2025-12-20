@@ -25,16 +25,13 @@ if not os.path.exists('crop_production.csv'):
     print("CRITICAL: crop_production.csv NOT FOUND in backend folder!")
 
 
-# ==========================================
-# ML MODEL IMPLEMENTATION (Math from Scratch)
-# ==========================================
-# This implementation uses the 4 Pillars of Science:
-# 1. Linear Algebra: Vectorization of weights and inputs.
-# 2. Statistics: Feature scaling (Standardization) and R² score.
-# 3. Calculus: Gradient calculation via partial derivatives.
-# 4. Optimization: Parameter updates using Gradient Descent.
+# ============================================================
+# PARTHIBAN AI LIBRARY (ParthiML v1.0)
+# Created by: Parthiban 
+# Implementation: Linear Algebra, Calculus, Statistics
+# ============================================================
 
-class LinearRegressionGradientDescent:
+class ParthiLinearML:
     def __init__(self, learning_rate=0.01, n_iterations=3000):
         self.learning_rate = learning_rate # Optimization: Step size for updates
         self.n_iterations = n_iterations   # Optimization: Number of training cycles
@@ -79,7 +76,7 @@ class LinearRegressionGradientDescent:
         return np.dot(X, self.weights) + self.bias
 
 # Global Storage for Model and Statistics
-model = None            # The trained AI engine
+model = ParthiLinearML(learning_rate=0.1, n_iterations=1000) # The trained ParthiML AI engine
 feature_means = None    # Statistics: Training means (for normalization)
 feature_stds = None     # Statistics: Training deviations (for normalization)
 target_mean = 0         # Statistics: Production mean (for inverse scale)
@@ -93,7 +90,8 @@ cost_plot_b64 = ""
 residual_plot_b64 = ""
 
 def train_model():
-    global model, feature_means, feature_stds, target_mean, target_std, head_preview, historical_data, regression_plot_b64, cost_plot_b64, residual_plot_b64
+    global model, feature_means, feature_stds, target_mean, target_std, head_preview, historical_data
+    global regression_plot_b64, cost_plot_b64, residual_plot_b64
     try:
         # Statistics: Loading and Cleaning Data
         print("Loading dataset...")
@@ -112,98 +110,91 @@ def train_model():
         # Statistics: Store a snippet for the frontend table
         head_preview = data.head(5).to_dict(orient='records')
         
-        # Linear Algebra: Separate into Feature Matrix (X) and Target Vector (y)
-        X_raw = data[['Area', 'Crop_Year']].values
-        y_raw = data['Production'].values
+        # Feature Engineering: Use Area and Year (matched with predict function)
+        X = data[['Area', 'Crop_Year']].values
+        y = data['Production'].values
 
-        # Statistics: Calculate Normalization parameters (Mean and STD)
-        feature_means = np.mean(X_raw, axis=0) # mu for inputs
-        feature_stds = np.std(X_raw, axis=0)  # sigma for inputs
-        target_mean = np.mean(y_raw)           # mu for output
-        target_std = np.std(y_raw)             # sigma for output
+        # Statistics: Scaling (Z-Score Normalization)
+        # This is critical for the Custom ML library to work with Gradient Descent
+        feature_means = np.mean(X, axis=0)
+        feature_stds = np.std(X, axis=0)
+        target_mean = np.mean(y)
+        target_std = np.std(y)
 
-        # Statistics: Apply Standardization (Z-Score) -> z = (x - mu) / sigma
-        X_scaled = (X_raw - feature_means) / feature_stds
-        y_scaled = (y_raw - target_mean) / target_std
+        # Handle zero-variance features to avoid division by zero
+        feature_stds[feature_stds == 0] = 1
+        adj_target_std = target_std if target_std != 0 else 1
 
-        # Statistics: Manual Train/Test Split (80% for learning, 20% for testing)
-        split_idx = int(0.8 * len(X_scaled))
-        X_train, X_test = X_scaled[:split_idx], X_scaled[split_idx:]
-        y_train, y_test = y_scaled[:split_idx], y_scaled[split_idx:]
+        X_scaled = (X - feature_means) / feature_stds
+        y_scaled = (y - target_mean) / adj_target_std
 
-        # Optimization: Instantiate and train the manual model
-        print(f"Training on {len(X_train)} samples...")
-        model = LinearRegressionGradientDescent(learning_rate=0.01, n_iterations=3000)
-        model.fit(X_train, y_train)
+        # USE THE CUSTOM LIBRARY
+        print(f"Training on {len(X)} samples using ParthiLinearML...")
+        model.fit(X_scaled, y_scaled)
         
-        # --- CALCULUS & STATISTICS: DIAGNOSTIC PLOTS ---
-        
-        # Diagnostic 1: Regression Fit Visualization
+        # Generate Diagnostic Plots
+        # Plot 1: Regression Fit (Showing Area vs Production)
         plt.figure(figsize=(6, 4))
-        # Select sub-sample for plot clarity
-        X_test_viz = X_test[:100]
-        y_test_viz = y_test[:100]
-        # Linear Algebra: Predict using the learned weights
-        y_pred_viz = model.predict(X_test_viz)
+        plt.scatter(X[:, 0], y, color='#3b82f6', alpha=0.6, label='Actual Data')
         
-        # Statistics: Inverse transformation to bring data back to real-world units
-        X_area_actual = X_test_viz[:, 0] * feature_stds[0] + feature_means[0]
-        y_actual = (y_test_viz * target_std) + target_mean
-        y_pred = (y_pred_viz * target_std) + target_mean
+        # Create a trend line based on varied Area but mean Year
+        X_range_raw = np.linspace(X[:, 0].min(), X[:, 0].max(), 100)
+        X_range_input = np.column_stack([X_range_raw, np.full_like(X_range_raw, feature_means[1])])
+        X_range_scaled = (X_range_input - feature_means) / feature_stds
         
-        # Probability: Scatter plot of real samples
-        plt.scatter(X_area_actual, y_actual, color='#3b82f6', label='Actual', alpha=0.6)
-        # Geometry: The Linear Equation line
-        plt.plot(X_area_actual, y_pred, color='#ef4444', label='AI Fit Line', linewidth=2)
-        plt.title('Plot 1: Linear Regression Fit')
-        plt.xlabel('Area (Hectares)')
-        plt.ylabel('Production')
+        y_pred_scaled = model.predict(X_range_scaled)
+        y_pred_range = (y_pred_scaled * adj_target_std) + target_mean
+        
+        plt.plot(X_range_raw, y_pred_range, color='#ef4444', linewidth=2, label='AI Fit Line')
+        plt.title("Plot 1: Linear Regression Fit (ParthiML)")
+        plt.xlabel("Area (Hectares)")
+        plt.ylabel("Production")
         plt.legend()
         plt.tight_layout()
-        img1 = io.BytesIO()
-        plt.savefig(img1, format='png')
-        img1.seek(0)
-        regression_plot_b64 = base64.b64encode(img1.getvalue()).decode()
+        
+        buf1 = io.BytesIO()
+        plt.savefig(buf1, format='png')
+        buf1.seek(0)
+        regression_plot_b64 = base64.b64encode(buf1.getvalue()).decode('utf-8')
         plt.close()
 
-        # Diagnostic 2: Optimization History (Calculus progress)
+        # Plot 2: Cost History
         plt.figure(figsize=(6, 4))
-        # Optimization: Plotting the "descent" into the error minimum
-        plt.plot(model.cost_history, color='#7c3aed', linewidth=2)
-        plt.title('Plot 2: Optimization Progress')
-        plt.xlabel('Iterations')
-        plt.ylabel('Cost (MSE Error)')
+        plt.plot(range(len(model.cost_history)), model.cost_history, color='#7c3aed', linewidth=2)
+        plt.title("Plot 2: Optimization Progress (Gradient Descent)")
+        plt.xlabel("Iterations")
+        plt.ylabel("Cost (MSE Error)")
         plt.tight_layout()
-        img2 = io.BytesIO()
-        plt.savefig(img2, format='png')
-        img2.seek(0)
-        cost_plot_b64 = base64.b64encode(img2.getvalue()).decode()
+        
+        buf2 = io.BytesIO()
+        plt.savefig(buf2, format='png')
+        buf2.seek(0)
+        cost_plot_b64 = base64.b64encode(buf2.getvalue()).decode('utf-8')
         plt.close()
 
-        # Diagnostic 3: Residual Analysis (Statistical Error check)
-        y_full_pred = model.predict(X_test)
-        # Statistics: Calculate Errors (Residuals = Actual - predicted)
-        residuals = (y_test - y_full_pred) * target_std
+        # Plot 3: Residuals
         plt.figure(figsize=(6, 4))
-        # Statistics: Verify if distribution is Gaussian (Normal)
+        y_all_pred_scaled = model.predict(X_scaled)
+        y_all_pred = (y_all_pred_scaled * adj_target_std) + target_mean
+        residuals = y - y_all_pred
         plt.hist(residuals, bins=30, color='#10b981', edgecolor='white')
-        plt.title('Plot 3: Error Distribution (Residuals)')
-        plt.xlabel('Prediction Error')
-        plt.ylabel('Frequency')
+        plt.title("Plot 3: Error Distribution (Residuals)")
+        plt.xlabel("Prediction Error")
+        plt.ylabel("Frequency")
         plt.tight_layout()
-        img3 = io.BytesIO()
-        plt.savefig(img3, format='png')
-        img3.seek(0)
-        residual_plot_b64 = base64.b64encode(img3.getvalue()).decode()
+        
+        buf3 = io.BytesIO()
+        plt.savefig(buf3, format='png')
+        buf3.seek(0)
+        residual_plot_b64 = base64.b64encode(buf3.getvalue()).decode('utf-8')
         plt.close()
-
+        
         print("Model trained and all 3 diagnostic charts generated.")
         
     except Exception as e:
         print(f"CRITICAL ERROR training model: {e}")
 
-# Train immediately
-train_model()
+# train_model() # Removed to prevent double training (will train on startup)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -379,7 +370,7 @@ def health_check():
     """Simple health check for Render/Cloud monitoring"""
     return jsonify({
         'status': 'online',
-        'model_loaded': model is not None,
+        'model_trained': model.weights is not None,
         'message': 'Parthiban AI Backend is running'
     }), 200
 
