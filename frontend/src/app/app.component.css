@@ -329,10 +329,16 @@ input::placeholder {
 /* Data & Charts */
 .table-responsive {
   border-radius: 20px;
-  border: none;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
   background: white;
   margin-bottom: 3rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 table th {
@@ -340,22 +346,67 @@ table th {
   color: #64748b;
   font-weight: 700;
   padding: 1.25rem;
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 table td {
   padding: 1.25rem;
   color: #334155;
   font-weight: 500;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.diagnostic-grid img {
+.diagnostic-grid {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.chart-container {
+  background: white;
+  padding: 1.5rem;
   border-radius: 24px;
-  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+  flex: 1;
+  min-width: 320px;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart-container h3 {
+  margin-top: 0;
+  color: #475569;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.chart-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: contain;
   transition: transform 0.3s;
 }
 
-.diagnostic-grid img:hover {
-  transform: scale(1.02);
+.chart-container img:hover {
+  transform: scale(1.05);
+}
+
+.chart-caption {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.4;
 }
 
 @keyframes slideDown {
