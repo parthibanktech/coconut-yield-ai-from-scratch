@@ -1,9 +1,12 @@
-<div class="container">
-    <header>
-        <h1>🥥 <span>Coconut Yield Predictor: Parthiban AI</span></h1>
-        <p class="subtitle">Mission: Pure Mathematical Education & Agricultural Analytics</p>
+<header>
+    <h1>🥥 <span>Coconut Yield Predictor: Parthiban AI</span></h1>
+    <p class="subtitle">Mission: Pure Mathematical Education & Agricultural Analytics</p>
+</header>
 
-        <div class="math-hero-section fadeIn">
+<div class="main-layout">
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3>Math Foundations</h3>
             <div class="math-card-grid">
                 <div class="math-mini-card">
                     <span class="math-icon">📐</span>
@@ -26,14 +29,15 @@
                     <p>Gradient Descent (3,000 steps)</p>
                 </div>
             </div>
-            <div class="edu-notice">
-                📚 <strong>Education Notice:</strong> This project is built <strong>from scratch</strong> (no ML
-                libraries) to demonstrate the raw mathematical mechanics of AI for educational purposes.
-            </div>
         </div>
-    </header>
 
-    <main>
+        <div class="edu-notice">
+            📚 <strong>Education Notice:</strong> This project is built <strong>from scratch</strong> (no ML
+            libraries) to demonstrate the raw mathematical mechanics of AI for educational purposes.
+        </div>
+    </aside>
+
+    <main class="content-area">
         <div class="tabs">
             <button (click)="selectTab('predict')" [class.active]="activeTab === 'predict'">Prediction</button>
             <button (click)="selectTab('data')" [class.active]="activeTab === 'data'">Data Science</button>
@@ -254,3 +258,4 @@
 
     </main>
 </div>
+```
