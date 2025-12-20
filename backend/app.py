@@ -14,7 +14,8 @@ CORS(app, resources={r"/*": {
     "origins": [
         "http://localhost:4200", 
         "http://127.0.0.1:4200",
-        "https://coconut-yield-app.onrender.com"
+        "https://coconut-yield-app.onrender.com",
+        "https://*.onrender.com"
     ]
 }})
 
