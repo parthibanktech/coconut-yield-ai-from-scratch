@@ -8,6 +8,8 @@ import matplotlib
 matplotlib.use('Agg') # Use non-interactive backend for server
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression as SklearnLinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
 
 
 app = Flask(__name__)
@@ -86,6 +88,8 @@ target_mean = 0         # Statistics: Production mean (for inverse scale)
 target_std = 1          # Statistics: Production deviation (for inverse scale)
 head_preview = []       # Data Preview: First 5 rows of raw data
 historical_data = None  # Full Dataset: For historical lookup matches
+model_accuracy = 0      # Validation: R2 Score of custom engine
+sklearn_accuracy = 0    # Validation: R2 Score of sklearn engine
 
 # Global Analytics Storage (Base64 Images)
 regression_plot_b64 = ""
@@ -94,7 +98,7 @@ residual_plot_b64 = ""
 
 def train_model():
     global model, sklearn_model, feature_means, feature_stds, target_mean, target_std, head_preview, historical_data
-    global regression_plot_b64, cost_plot_b64, residual_plot_b64
+    global regression_plot_b64, cost_plot_b64, residual_plot_b64, model_accuracy, sklearn_accuracy
     try:
         # Statistics: Loading and Cleaning Data
         print("Loading dataset...")
@@ -131,13 +135,27 @@ def train_model():
         X_scaled = (X - feature_means) / feature_stds
         y_scaled = (y - target_mean) / adj_target_std
 
+        # ============================================================
+        # TRAIN/TEST SPLIT (80% Training, 20% Validation)
+        # ============================================================
+        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled, test_size=0.2, random_state=42)
+
         # USE THE CUSTOM LIBRARY
-        print(f"Training on {len(X)} samples using ParthiLinearRegression...")
-        model.fit(X_scaled, y_scaled)
+        print(f"Training on {len(X_train)} samples using ParthiLinearRegression...")
+        model.fit(X_train, y_train)
         
         # USE SKLEARN FOR COMPARISON
         print("Training Sklearn LinearRegression for comparison...")
-        sklearn_model.fit(X_scaled, y_scaled)
+        sklearn_model.fit(X_train, y_train)
+
+        # Statistics: Accuracy Calculation (R2 Score)
+        y_custom_pred = model.predict(X_test)
+        y_sk_pred = sklearn_model.predict(X_test)
+        
+        model_accuracy = r2_score(y_test, y_custom_pred)
+        sklearn_accuracy = r2_score(y_test, y_sk_pred)
+        
+        print(f"Validation Complete! Custom R2: {model_accuracy:.4f}, Sklearn R2: {sklearn_accuracy:.4f}")
         
         # Generate Diagnostic Plots
         # Plot 1: Regression Fit (Showing Area vs Production)
@@ -339,7 +357,9 @@ def predict():
             'explanation': math_steps,
             'context_plot': f"data:image/png;base64,{prediction_plot}",
             'global_context_plot': f"data:image/png;base64,{global_context_plot}",
-            'historical_match': actual_match
+            'historical_match': actual_match,
+            'custom_accuracy': model_accuracy,
+            'sklearn_accuracy': sklearn_accuracy
         })
 
     except Exception as e:

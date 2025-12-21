@@ -7,6 +7,7 @@ Successfully bridge the gap between complex mathematics and real-world agricultu
 ## 🌟 Key Features
 
 - **Brain From Scratch:** Implements Linear Regression using fundamental **Linear Algebra**, **Calculus**, and **Statistics**. No high-level ML libraries were used for the core model.
+- **Scientific Validation:** Implements a manual **80/20 Train-Test Split** using `train_test_split` to calculate real-world validation scores (R²) on unseen data.
 - **Dual-Engine Benchmarking:** Integrated **Scikit-Learn** as a side-by-side benchmark, allowing users to compare the custom "Scratch" results against industry-standard libraries.
 - **Educational UI:** Every prediction comes with a "Step-by-Step" math explanation, showing exactly how the Z-Scores, Dot Products, and Inverse Scaling were calculated.
 - **Historical Reality Check:** Automatically matches user input against 15,000+ historical records to show "AI Prediction vs. Historical Reality."

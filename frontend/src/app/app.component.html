@@ -112,15 +112,23 @@
 
                 <!-- Comparison Card -->
                 <div class="comparison-card fadeIn">
-                    <h3>Engine Comparison Benchmarks</h3>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0;">Engine Comparison Benchmarks</h3>
+                        <span class="badge" style="background: #e0f2fe; color: #0369a1;">80/20 Train-Test Split</span>
+                    </div>
                     <div class="comparison-grid">
                         <div class="comparison-item" [class.active]="selectedModel === 'custom'">
-                            <span class="comparison-label">ParthiML (Custom)</span>
-                            <span class="comparison-value">{{ result.predicted_production | number:'1.0-2' }}</span>
+                            <span class="comparison-label">ParthiML Accuracy (R²)</span>
+                            <span class="comparison-value">{{ result.custom_accuracy | number:'1.2-4' }}</span>
+                            <p style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">Custom math engine validation
+                                score</p>
                         </div>
                         <div class="comparison-item" [class.active]="selectedModel === 'sklearn'">
-                            <span class="comparison-label">Scikit-Learn</span>
-                            <span class="comparison-value">{{ result.sklearn_prediction | number:'1.0-2' }}</span>
+                            <span class="comparison-label">Sklearn Accuracy (R²)</span>
+                            <span class="comparison-value">{{ result.sklearn_accuracy | number:'1.2-4' }}</span>
+                            <p style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">Industry library validation
+                                score</p>
                         </div>
                     </div>
                     <div class="accuracy-delta-box">
