@@ -408,7 +408,9 @@ def health_check():
         'message': 'Parthiban AI Backend is running'
     }), 200
 
+# Train the model immediately on startup (Required for Gunicorn on Render)
+train_model()
+
 if __name__ == '__main__':
-    train_model() # Train before starting server
     port = int(os.environ.get('PORT', 8080))
     app.run(debug=True, host='0.0.0.0', port=port)
