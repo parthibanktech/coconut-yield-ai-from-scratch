@@ -65,6 +65,25 @@
                     </div>
                 </div>
 
+                <!-- Model Selection Choice -->
+                <div class="model-selector-container"
+                    style="margin-top: 1.5rem; padding: 1rem; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 10px; color: #1e293b;">Select
+                        Prediction Engine:</label>
+                    <div style="display: flex; gap: 20px;">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="radio" name="model" value="custom" [(ngModel)]="selectedModel"
+                                style="margin-right: 8px;">
+                            <span>ParthiML (Custom Math)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="radio" name="model" value="sklearn" [(ngModel)]="selectedModel"
+                                style="margin-right: 8px;">
+                            <span>Scikit-Learn (Industry Std)</span>
+                        </label>
+                    </div>
+                </div>
+
                 <button (click)="predict()" [disabled]="!area || loading" class="predict-button">
                     <span *ngIf="!loading">Predict Yield</span>
                     <span *ngIf="loading">Calculating...</span>
@@ -74,8 +93,49 @@
             <div *ngIf="result" class="card result-section fadeIn">
                 <h2>Prediction Result</h2>
                 <div class="result-value">
-                    <span class="value">{{ result.predicted_production | number:'1.0-0' }}</span>
+                    <!-- Dynamic display based on selection -->
+                    <div *ngIf="selectedModel === 'custom'">
+                        <span class="value">{{ result.predicted_production | number:'1.0-0' }}</span>
+                        <p style="font-size: 0.9rem; color: #64748b; margin-top: -10px;">Calculated via
+                            <strong>ParthiLinearRegression</strong></p>
+                    </div>
+                    <div *ngIf="selectedModel === 'sklearn'">
+                        <span class="value">{{ result.sklearn_prediction | number:'1.0-0' }}</span>
+                        <p style="font-size: 0.9rem; color: #64748b; margin-top: -10px;">Calculated via <strong>SKLearn
+                                LinearRegression</strong></p>
+                    </div>
                     <span class="unit">Coconuts</span>
+                </div>
+
+                <!-- Comparison Card -->
+                <div class="comparison-card"
+                    style="margin: 1.5rem 0; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 12px; background: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);">
+                    <h3
+                        style="margin-top: 0; font-size: 1rem; color: #334155; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                        Engine Comparison Benchmarks</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center;">
+                        <div [style.opacity]="selectedModel === 'custom' ? '1' : '0.5'">
+                            <span
+                                style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">ParthiML
+                                (Custom)</span>
+                            <strong style="font-size: 1.1rem; color: #2563eb;">{{ result.predicted_production |
+                                number:'1.0-2' }}</strong>
+                        </div>
+                        <div [style.opacity]="selectedModel === 'sklearn' ? '1' : '0.5'">
+                            <span
+                                style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Scikit-Learn</span>
+                            <strong style="font-size: 1.1rem; color: #059669;">{{ result.sklearn_prediction |
+                                number:'1.0-2' }}</strong>
+                        </div>
+                    </div>
+                    <div
+                        style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #f1f5f9; text-align: center;">
+                        <span style="font-size: 0.8rem; color: #64748b;">Accuracy Delta: </span>
+                        <span style="font-size: 0.8rem; font-weight: bold; color: #ef4444;">{{ result.accuracy_delta |
+                            number:'1.0-6' }}</span>
+                        <p style="font-size: 0.7rem; color: #94a3b8; margin: 5px 0 0 0;">(Difference between Scratch
+                            Math and Industry Lib)</p>
+                    </div>
                 </div>
 
                 <!-- Context Plot -->

@@ -6,11 +6,12 @@ Successfully bridge the gap between complex mathematics and real-world agricultu
 
 ## 🌟 Key Features
 
-- **Brain From Scratch:** Implements Linear Regression using fundamental **Linear Algebra**, **Calculus**, and **Statistics**. No high-level ML libraries (like Scikit-Learn or TensorFlow) were used for the model.
+- **Brain From Scratch:** Implements Linear Regression using fundamental **Linear Algebra**, **Calculus**, and **Statistics**. No high-level ML libraries were used for the core model.
+- **Dual-Engine Benchmarking:** Integrated **Scikit-Learn** as a side-by-side benchmark, allowing users to compare the custom "Scratch" results against industry-standard libraries.
 - **Educational UI:** Every prediction comes with a "Step-by-Step" math explanation, showing exactly how the Z-Scores, Dot Products, and Inverse Scaling were calculated.
 - **Historical Reality Check:** Automatically matches user input against 15,000+ historical records to show "AI Prediction vs. Historical Reality."
 - **Data Science Dashboard:** 
-  - **Plot 1: Regression Fit** (Actual vs. AI Trendline)
+  - **Plot 1: Regression Fit** (Actual vs. AI Trendline vs. Industry Fit)
   - **Plot 2: Optimization Progress** (Gradient Descent Cost reduction)
   - **Plot 3: Residual Analysis** (Statistical error distribution)
 

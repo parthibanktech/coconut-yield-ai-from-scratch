@@ -7,6 +7,8 @@ import io
 import matplotlib
 matplotlib.use('Agg') # Use non-interactive backend for server
 import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression as SklearnLinearRegression
+
 
 app = Flask(__name__)
 # Allow ALL origins for deployment stability
@@ -28,10 +30,10 @@ if not os.path.exists('crop_production.csv'):
 # ============================================================
 # PARTHIBAN AI LIBRARY (ParthiML v1.0)
 # Created by: Parthiban 
-# Implementation: Linear Algebra, Calculus, Statistics
+# Implementation: Custom Linear Regression Engine
 # ============================================================
 
-class ParthiLinearML:
+class ParthiLinearRegression:
     def __init__(self, learning_rate=0.01, n_iterations=3000):
         self.learning_rate = learning_rate # Optimization: Step size for updates
         self.n_iterations = n_iterations   # Optimization: Number of training cycles
@@ -76,7 +78,8 @@ class ParthiLinearML:
         return np.dot(X, self.weights) + self.bias
 
 # Global Storage for Model and Statistics
-model = ParthiLinearML(learning_rate=0.1, n_iterations=1000) # The trained ParthiML AI engine
+model = ParthiLinearRegression(learning_rate=0.1, n_iterations=1000) # Custom engine
+sklearn_model = SklearnLinearRegression() # Industry standard comparison
 feature_means = None    # Statistics: Training means (for normalization)
 feature_stds = None     # Statistics: Training deviations (for normalization)
 target_mean = 0         # Statistics: Production mean (for inverse scale)
@@ -90,7 +93,7 @@ cost_plot_b64 = ""
 residual_plot_b64 = ""
 
 def train_model():
-    global model, feature_means, feature_stds, target_mean, target_std, head_preview, historical_data
+    global model, sklearn_model, feature_means, feature_stds, target_mean, target_std, head_preview, historical_data
     global regression_plot_b64, cost_plot_b64, residual_plot_b64
     try:
         # Statistics: Loading and Cleaning Data
@@ -129,8 +132,12 @@ def train_model():
         y_scaled = (y - target_mean) / adj_target_std
 
         # USE THE CUSTOM LIBRARY
-        print(f"Training on {len(X)} samples using ParthiLinearML...")
+        print(f"Training on {len(X)} samples using ParthiLinearRegression...")
         model.fit(X_scaled, y_scaled)
+        
+        # USE SKLEARN FOR COMPARISON
+        print("Training Sklearn LinearRegression for comparison...")
+        sklearn_model.fit(X_scaled, y_scaled)
         
         # Generate Diagnostic Plots
         # Plot 1: Regression Fit (Showing Area vs Production)
@@ -145,8 +152,8 @@ def train_model():
         y_pred_scaled = model.predict(X_range_scaled)
         y_pred_range = (y_pred_scaled * adj_target_std) + target_mean
         
-        plt.plot(X_range_raw, y_pred_range, color='#ef4444', linewidth=2, label='AI Fit Line')
-        plt.title("Plot 1: Linear Regression Fit (ParthiML)")
+        plt.plot(X_range_raw, y_pred_range, color='#ef4444', linewidth=2, label='ParthiML (Custom)')
+        plt.title("Plot 1: Linear Regression Comparison")
         plt.xlabel("Area (Hectares)")
         plt.ylabel("Production")
         plt.legend()
@@ -206,9 +213,9 @@ def predict():
     3. Calculus-based explanation of the result.
     4. Inverse scale to get actual production value.
     """
-    global model, historical_data
+    global model, sklearn_model, historical_data
     try:
-        if model is None:
+        if model is None or model.weights is None:
             return jsonify({'error': 'Model is still training. Please wait.'}), 503
 
         data = request.json
@@ -239,6 +246,11 @@ def predict():
         # Actual = (z * sigma) + mu
         pred_actual = (pred_scaled * target_std) + target_mean
         result = max(0, float(pred_actual[0]))
+
+        # 5b. Sklearn Comparison Prediction
+        sk_pred_scaled = sklearn_model.predict(input_scaled)
+        sk_pred_actual = (sk_pred_scaled * target_std) + target_mean
+        sk_result = max(0, float(sk_pred_actual[0]))
 
         # 6. Check Historical Reality
         actual_match = None
@@ -322,6 +334,8 @@ def predict():
             'success': True,
             'input': {'area': area, 'year': year},
             'predicted_production': result,
+            'sklearn_prediction': sk_result,
+            'accuracy_delta': abs(result - sk_result),
             'explanation': math_steps,
             'context_plot': f"data:image/png;base64,{prediction_plot}",
             'global_context_plot': f"data:image/png;base64,{global_context_plot}",

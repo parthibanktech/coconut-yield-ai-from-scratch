@@ -22,6 +22,7 @@ export class AppComponent {
   result: any | null = null;
   loading = false;
   error: string | null = null;
+  selectedModel: 'custom' | 'sklearn' = 'custom';
 
   // Data Science State
   dataInsight: any | null = null;
