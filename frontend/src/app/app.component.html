@@ -94,20 +94,22 @@
 
             <div *ngIf="result" class="card result-section fadeIn">
                 <h2>Prediction Result</h2>
-                <div class="result-value">
+                <div class="result-value"
+                    style="display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;">
                     <!-- Dynamic display based on selection -->
-                    <div *ngIf="selectedModel === 'custom'">
-                        <span class="value">{{ result.predicted_production | number:'1.0-0' }}</span>
-                        <p style="font-size: 0.9rem; color: #64748b; margin-top: -10px;">Calculated via
-                            <strong>ParthiLinearRegression</strong>
-                        </p>
+                    <div *ngIf="selectedModel === 'custom'" class="engine-attribution">
+                        <span class="value" style="display: block; font-size: 4rem; line-height: 1.2;">{{
+                            result.predicted_production | number:'1.0-0' }}</span>
+                        <p style="font-size: 0.95rem; color: #64748b; margin: 0;">Predicted via <strong
+                                style="color: #7c3aed;">ParthiLinearRegression</strong></p>
                     </div>
-                    <div *ngIf="selectedModel === 'sklearn'">
-                        <span class="value">{{ result.sklearn_prediction | number:'1.0-0' }}</span>
-                        <p style="font-size: 0.9rem; color: #64748b; margin-top: -10px;">Calculated via <strong>SKLearn
-                                LinearRegression</strong></p>
+                    <div *ngIf="selectedModel === 'sklearn'" class="engine-attribution">
+                        <span class="value" style="display: block; font-size: 4rem; line-height: 1.2;">{{
+                            result.sklearn_prediction | number:'1.0-0' }}</span>
+                        <p style="font-size: 0.95rem; color: #64748b; margin: 0;">Predicted via <strong
+                                style="color: #059669;">SKLearn Engine</strong></p>
                     </div>
-                    <span class="unit">Coconuts</span>
+                    <span class="unit" style="margin-top: 5px;">Coconuts</span>
                 </div>
 
                 <!-- Comparison Card -->
