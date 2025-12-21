@@ -282,6 +282,162 @@ input::placeholder {
   color: #cbd5e1;
 }
 
+/* Model Selector Premium Styling */
+.model-selector-container {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 20px;
+  border: 2px solid #f1f5f9;
+  transition: all 0.3s ease;
+}
+
+.model-selector-container label {
+  display: block;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #1e293b;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.engine-options {
+  display: flex;
+  gap: 1rem;
+}
+
+.engine-option {
+  flex: 1;
+  position: relative;
+  cursor: pointer;
+}
+
+.engine-option input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.engine-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: white;
+  border: 2px solid #f1f5f9;
+  border-radius: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.engine-card .engine-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #334155;
+}
+
+.engine-card .engine-desc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.engine-option input:checked~.engine-card {
+  border-color: #7c3aed;
+  background: #f5f3ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.1);
+}
+
+.engine-option input:checked~.engine-card .engine-name {
+  color: #7c3aed;
+}
+
+/* Comparison Card Premium Styling */
+.comparison-card {
+  margin: 2.5rem 0;
+  padding: 2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+.comparison-card h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: #1e293b;
+  border-bottom: 2px solid #f8fafc;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.comparison-item {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 16px;
+  background: #f8fafc;
+  transition: all 0.3s;
+}
+
+.comparison-item.active {
+  background: #f5f3ff;
+  box-shadow: inset 0 0 0 2px #7c3aed;
+}
+
+.comparison-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.comparison-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.accuracy-delta-box {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #e2e8f0;
+  text-align: center;
+}
+
+.delta-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.delta-value {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ef4444;
+  margin-left: 8px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.delta-desc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 6px;
+}
+
 .predict-button {
   background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
   color: white;

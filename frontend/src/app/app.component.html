@@ -66,20 +66,22 @@
                 </div>
 
                 <!-- Model Selection Choice -->
-                <div class="model-selector-container"
-                    style="margin-top: 1.5rem; padding: 1rem; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <label style="display: block; font-weight: bold; margin-bottom: 10px; color: #1e293b;">Select
-                        Prediction Engine:</label>
-                    <div style="display: flex; gap: 20px;">
-                        <label style="display: flex; align-items: center; cursor: pointer;">
-                            <input type="radio" name="model" value="custom" [(ngModel)]="selectedModel"
-                                style="margin-right: 8px;">
-                            <span>ParthiML (Custom Math)</span>
+                <div class="model-selector-container">
+                    <label>Select Prediction Engine:</label>
+                    <div class="engine-options">
+                        <label class="engine-option">
+                            <input type="radio" name="model" value="custom" [(ngModel)]="selectedModel">
+                            <div class="engine-card">
+                                <span class="engine-name">ParthiML</span>
+                                <span class="engine-desc">Custom Math</span>
+                            </div>
                         </label>
-                        <label style="display: flex; align-items: center; cursor: pointer;">
-                            <input type="radio" name="model" value="sklearn" [(ngModel)]="selectedModel"
-                                style="margin-right: 8px;">
-                            <span>Scikit-Learn (Industry Std)</span>
+                        <label class="engine-option">
+                            <input type="radio" name="model" value="sklearn" [(ngModel)]="selectedModel">
+                            <div class="engine-card">
+                                <span class="engine-name">Scikit-Learn</span>
+                                <span class="engine-desc">Industry Std</span>
+                            </div>
                         </label>
                     </div>
                 </div>
@@ -97,7 +99,8 @@
                     <div *ngIf="selectedModel === 'custom'">
                         <span class="value">{{ result.predicted_production | number:'1.0-0' }}</span>
                         <p style="font-size: 0.9rem; color: #64748b; margin-top: -10px;">Calculated via
-                            <strong>ParthiLinearRegression</strong></p>
+                            <strong>ParthiLinearRegression</strong>
+                        </p>
                     </div>
                     <div *ngIf="selectedModel === 'sklearn'">
                         <span class="value">{{ result.sklearn_prediction | number:'1.0-0' }}</span>
@@ -108,33 +111,22 @@
                 </div>
 
                 <!-- Comparison Card -->
-                <div class="comparison-card"
-                    style="margin: 1.5rem 0; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 12px; background: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);">
-                    <h3
-                        style="margin-top: 0; font-size: 1rem; color: #334155; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
-                        Engine Comparison Benchmarks</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center;">
-                        <div [style.opacity]="selectedModel === 'custom' ? '1' : '0.5'">
-                            <span
-                                style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">ParthiML
-                                (Custom)</span>
-                            <strong style="font-size: 1.1rem; color: #2563eb;">{{ result.predicted_production |
-                                number:'1.0-2' }}</strong>
+                <div class="comparison-card fadeIn">
+                    <h3>Engine Comparison Benchmarks</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-item" [class.active]="selectedModel === 'custom'">
+                            <span class="comparison-label">ParthiML (Custom)</span>
+                            <span class="comparison-value">{{ result.predicted_production | number:'1.0-2' }}</span>
                         </div>
-                        <div [style.opacity]="selectedModel === 'sklearn' ? '1' : '0.5'">
-                            <span
-                                style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Scikit-Learn</span>
-                            <strong style="font-size: 1.1rem; color: #059669;">{{ result.sklearn_prediction |
-                                number:'1.0-2' }}</strong>
+                        <div class="comparison-item" [class.active]="selectedModel === 'sklearn'">
+                            <span class="comparison-label">Scikit-Learn</span>
+                            <span class="comparison-value">{{ result.sklearn_prediction | number:'1.0-2' }}</span>
                         </div>
                     </div>
-                    <div
-                        style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #f1f5f9; text-align: center;">
-                        <span style="font-size: 0.8rem; color: #64748b;">Accuracy Delta: </span>
-                        <span style="font-size: 0.8rem; font-weight: bold; color: #ef4444;">{{ result.accuracy_delta |
-                            number:'1.0-6' }}</span>
-                        <p style="font-size: 0.7rem; color: #94a3b8; margin: 5px 0 0 0;">(Difference between Scratch
-                            Math and Industry Lib)</p>
+                    <div class="accuracy-delta-box">
+                        <span class="delta-label">Accuracy Delta:</span>
+                        <span class="delta-value">{{ result.accuracy_delta | number:'1.0-6' }}</span>
+                        <p class="delta-desc">(Numerical difference between Scratch Math and Industry Library)</p>
                     </div>
                 </div>
 
